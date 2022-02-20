@@ -27,8 +27,4 @@ public class Horse extends ChessPiece {
     public String getSymbol() {
         return "H";
     }
-
-    private boolean checkPosition(int position) {
-        return ((position >= 0) && (position <= 7));
-    }
 }
