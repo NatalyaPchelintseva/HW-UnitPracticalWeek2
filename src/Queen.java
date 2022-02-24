@@ -14,28 +14,29 @@ public class Queen extends ChessPiece {
         boolean isInSingleCell = false;
         boolean isInStraightLine = false;
         boolean isInDiagonal = false;
-        int[] leftUpCorner = new int[2];
-        leftUpCorner[0] = line + 1;
-        leftUpCorner[1] = column - 1;
-        int[] leftDownCorner = new int[2];
-        leftDownCorner[0] =  line - 1;
-        leftDownCorner[1] = column - 1;
-        int[] rightUpCorner = new int[2];
-        rightUpCorner[0] = line + 1;
-        rightUpCorner[1] = column + 1;
-        int[] rightDownCorner = new int[2];
-        rightDownCorner[0] = line - 1;
-        rightDownCorner[1] = line + 1;
+        int[][] leftUpCorner = new int[2][8];
+        getLeftUpCorner(2, 3, leftUpCorner);
+
+        int[][] leftDownCorner = new int[2][8];
+        getLeftDownCorner(2, 3, leftDownCorner);
+
+        int[][] rightUpCorner = new int[2][8];
+        getRightUpCorner(2, 3, rightUpCorner);
+
+        int[][] rightDownCorner = new int[2][8];
+        getRightDownCorner(2, 3, rightDownCorner);
 
         if (checkPosition(line) && checkPosition(column) && checkPosition(toLine) && checkPosition(toColumn)) {
             if (Math.abs(line - toLine) == 1 || Math.abs(column - toColumn) == 1) isInSingleCell = true;
             if ((line == toLine) || (column == toColumn)) isInStraightLine = true;
-            if ((toLine == leftUpCorner[0] && toColumn == leftUpCorner[1]) ||
-                    (toLine == leftDownCorner[0] && toColumn == leftDownCorner[1]) ||
-                    (toLine == rightUpCorner[0] && toColumn == rightUpCorner[1]) ||
-                    (toLine == rightDownCorner[0] && toColumn == rightDownCorner[1]))
+            int dx = Math.abs(line - toLine);
+            int dy = Math.abs(column - toColumn);
+            if ((toLine == leftUpCorner[0][dx] && toColumn == leftUpCorner[1][dy]) ||
+                    (toLine == leftDownCorner[0][dx] && toColumn == leftDownCorner[1][dy]) ||
+                    (toLine == rightUpCorner[0][dx] && toColumn == rightUpCorner[1][dy]) ||
+                    (toLine == rightDownCorner[0][dx] && toColumn == rightDownCorner[1][dy]))
                 isInDiagonal = true;
-            if (isInDiagonal || isInStraightLine || isInSingleCell) return true;
+            if ((isInDiagonal || isInStraightLine || isInSingleCell) && !isUnderAttack(chessBoard, toLine, toColumn)) return true;
         }
         return false;
     }
@@ -60,4 +61,30 @@ public class Queen extends ChessPiece {
             return false;
         } else return true;
     }
+
+    public void getLeftUpCorner(int line, int column, int[][] DiagonalElements) {
+        for (int i = 0 ; i < 8; i++) {
+            DiagonalElements[0][i] = line++;
+            DiagonalElements[1][i] = column--;
+        }
+    }
+    public void getLeftDownCorner(int line, int column, int[][] DiagonalElements) {
+        for (int i = 0 ; i < 8; i++) {
+            DiagonalElements[0][i] = line--;
+            DiagonalElements[1][i] = column--;
+        }
+    }
+    public void getRightUpCorner(int line, int column, int[][] DiagonalElements) {
+        for (int i = 0 ; i < 8; i++) {
+            DiagonalElements[0][i] = line++;
+            DiagonalElements[1][i] = column++;
+        }
+    }
+    public void getRightDownCorner(int line, int column, int[][] DiagonalElements) {
+        for (int i = 0 ; i < 8; i++) {
+            DiagonalElements[0][i] = line--;
+            DiagonalElements[1][i] = column++;
+        }
+    }
+
 }
